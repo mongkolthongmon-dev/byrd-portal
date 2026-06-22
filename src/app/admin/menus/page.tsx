@@ -2,6 +2,7 @@ import { menuService } from '@/services/menuService';
 import { packageService } from '@/services/packageService';
 import MenuRow from '@/components/MenuRow';
 import IconField from '@/components/IconField';
+import ActionForm from '@/components/ActionForm';
 import { createMenu } from '../actions';
 
 export const runtime = 'nodejs';
@@ -22,7 +23,7 @@ export default async function AdminMenusPage() {
 
   return (
     <div className="space-y-6">
-      <form
+      <ActionForm
         action={createMenu}
         className="grid items-start gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-2 lg:grid-cols-3"
       >
@@ -63,7 +64,7 @@ export default async function AdminMenusPage() {
         <button className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 sm:col-span-2 lg:col-span-3">
           Add menu item
         </button>
-      </form>
+      </ActionForm>
 
       <div className="space-y-6">
         {pkgs.map((p) => {

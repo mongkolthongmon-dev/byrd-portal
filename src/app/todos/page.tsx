@@ -1,6 +1,7 @@
 import { requireUser } from '@/lib/guards';
 import { todoService } from '@/services/todoService';
 import TodoItem from '@/components/TodoItem';
+import ActionForm from '@/components/ActionForm';
 import { addTodo } from './actions';
 
 export const runtime = 'nodejs';
@@ -21,7 +22,7 @@ export default async function TodosPage() {
         </p>
       </div>
 
-      <form action={addTodo} className="flex gap-2">
+      <ActionForm action={addTodo} className="flex gap-2">
         <input
           name="title"
           required
@@ -31,7 +32,7 @@ export default async function TodosPage() {
         <button className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
           Add
         </button>
-      </form>
+      </ActionForm>
 
       {items.length === 0 ? (
         <p className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500">

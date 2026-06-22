@@ -14,11 +14,14 @@ export const packageService = {
     return rows[0] ?? null;
   },
 
+  // Returns the inserted row, or null if a package with that name already exists.
   async create(data: { name: string; description?: string | null }) {
-    await db
+    const rows = await db
       .insert(packages)
       .values({ name: data.name, description: data.description ?? null })
-      .onConflictDoNothing();
+      .onConflictDoNothing()
+      .returning();
+    return rows[0] ?? null;
   },
 
   async remove(id: number) {

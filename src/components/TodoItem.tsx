@@ -2,21 +2,22 @@
 
 import { useState } from 'react';
 import { deleteTodo, editTodo, toggleTodo } from '@/app/todos/actions';
+import ActionForm from '@/components/ActionForm';
 
 type Todo = { id: number; title: string; done: boolean };
 
 // A single todo row. Toggles between a read view (check / edit / delete) and an
-// inline edit form. All mutations call the owner-scoped server actions.
+// inline edit form. All mutations go through ActionForm, which toasts results.
 export default function TodoItem({ todo }: { todo: Todo }) {
   const [editing, setEditing] = useState(false);
 
   if (editing) {
     return (
       <li key="edit" className="flex items-center gap-2 px-4 py-3">
-        <form
-          action={async (formData) => {
-            await editTodo(formData);
-            setEditing(false);
+        <ActionForm
+          action={editTodo}
+          onResult={(r) => {
+            if (r.ok) setEditing(false);
           }}
           className="flex flex-1 items-center gap-2"
         >
@@ -34,7 +35,7 @@ export default function TodoItem({ todo }: { todo: Todo }) {
           >
             Save
           </button>
-        </form>
+        </ActionForm>
         <button
           type="button"
           onClick={() => setEditing(false)}
@@ -48,7 +49,7 @@ export default function TodoItem({ todo }: { todo: Todo }) {
 
   return (
     <li key="view" className="flex items-center gap-3 px-4 py-3">
-      <form action={toggleTodo}>
+      <ActionForm action={toggleTodo}>
         <input type="hidden" name="id" value={todo.id} />
         <input type="hidden" name="done" value={String(todo.done)} />
         <button
@@ -62,7 +63,7 @@ export default function TodoItem({ todo }: { todo: Todo }) {
         >
           ✓
         </button>
-      </form>
+      </ActionForm>
 
       <span
         className={`flex-1 text-sm ${
@@ -81,7 +82,7 @@ export default function TodoItem({ todo }: { todo: Todo }) {
         Edit
       </button>
 
-      <form action={deleteTodo}>
+      <ActionForm action={deleteTodo}>
         <input type="hidden" name="id" value={todo.id} />
         <button
           type="submit"
@@ -90,7 +91,7 @@ export default function TodoItem({ todo }: { todo: Todo }) {
         >
           ✕
         </button>
-      </form>
+      </ActionForm>
     </li>
   );
 }

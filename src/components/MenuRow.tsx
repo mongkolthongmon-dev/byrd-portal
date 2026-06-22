@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { deleteMenu, toggleMenu, updateMenu } from '@/app/admin/actions';
 import IconField from '@/components/IconField';
+import ActionForm from '@/components/ActionForm';
 
 type Menu = {
   id: number;
@@ -23,10 +24,10 @@ export default function MenuRow({ menu }: { menu: Menu }) {
   if (editing) {
     return (
       <li key="edit" className="px-4 py-4">
-        <form
-          action={async (formData) => {
-            await updateMenu(formData);
-            setEditing(false);
+        <ActionForm
+          action={updateMenu}
+          onResult={(r) => {
+            if (r.ok) setEditing(false);
           }}
           className="grid items-start gap-3 sm:grid-cols-2"
         >
@@ -66,7 +67,7 @@ export default function MenuRow({ menu }: { menu: Menu }) {
               Cancel
             </button>
           </div>
-        </form>
+        </ActionForm>
       </li>
     );
   }
@@ -85,7 +86,7 @@ export default function MenuRow({ menu }: { menu: Menu }) {
       </span>
       <span className="text-xs text-slate-400">#{menu.sortOrder}</span>
 
-      <form action={toggleMenu}>
+      <ActionForm action={toggleMenu}>
         <input type="hidden" name="id" value={menu.id} />
         <input type="hidden" name="enabled" value={String(menu.enabled)} />
         <button
@@ -95,7 +96,7 @@ export default function MenuRow({ menu }: { menu: Menu }) {
         >
           {menu.enabled ? 'Enabled' : 'Disabled'}
         </button>
-      </form>
+      </ActionForm>
 
       <button
         type="button"
@@ -105,10 +106,10 @@ export default function MenuRow({ menu }: { menu: Menu }) {
         Edit
       </button>
 
-      <form action={deleteMenu}>
+      <ActionForm action={deleteMenu}>
         <input type="hidden" name="id" value={menu.id} />
         <button className="text-sm text-slate-400 hover:text-red-600">✕</button>
-      </form>
+      </ActionForm>
     </li>
   );
 }

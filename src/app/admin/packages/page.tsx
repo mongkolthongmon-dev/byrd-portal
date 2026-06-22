@@ -1,4 +1,5 @@
 import { packageService } from '@/services/packageService';
+import ActionForm from '@/components/ActionForm';
 import { createPackage, deletePackage } from '../actions';
 
 export const runtime = 'nodejs';
@@ -8,7 +9,7 @@ export default async function AdminPackagesPage() {
 
   return (
     <div className="space-y-6">
-      <form
+      <ActionForm
         action={createPackage}
         className="grid gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-[1fr_2fr_auto] sm:items-end"
       >
@@ -34,7 +35,7 @@ export default async function AdminPackagesPage() {
         <button className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
           Add package
         </button>
-      </form>
+      </ActionForm>
 
       {rows.length === 0 ? (
         <p className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500">
@@ -50,10 +51,10 @@ export default async function AdminPackagesPage() {
                   {p.description ?? 'No description.'}
                 </div>
               </div>
-              <form action={deletePackage}>
+              <ActionForm action={deletePackage}>
                 <input type="hidden" name="id" value={p.id} />
                 <button className="text-sm text-slate-400 hover:text-red-600">Delete</button>
-              </form>
+              </ActionForm>
             </li>
           ))}
         </ul>

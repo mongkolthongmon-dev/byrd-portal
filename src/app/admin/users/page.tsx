@@ -1,5 +1,6 @@
 import { packageService } from '@/services/packageService';
 import { userService } from '@/services/userService';
+import ActionForm from '@/components/ActionForm';
 import { updateUser } from '../actions';
 
 export const runtime = 'nodejs';
@@ -66,7 +67,7 @@ export default async function AdminUsersPage({
 
           {/* One form per row, laid out on the same grid so columns align */}
           {allUsers.map((u) => (
-            <form
+            <ActionForm
               key={u.id}
               action={updateUser}
               className={`grid grid-cols-1 items-center gap-2 border-t border-slate-100 px-4 py-3 sm:gap-3 ${GRID}`}
@@ -116,7 +117,7 @@ export default async function AdminUsersPage({
               <button className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-700 sm:justify-self-end">
                 Save
               </button>
-            </form>
+            </ActionForm>
           ))}
         </div>
       )}

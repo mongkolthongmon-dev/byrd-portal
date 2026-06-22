@@ -20,6 +20,7 @@ export const oidcService = {
     }
   },
 
+  // Returns the inserted row, or null if a provider with that id already exists.
   async create(data: {
     id: string;
     name: string;
@@ -28,7 +29,7 @@ export const oidcService = {
     clientSecret: string;
     scopes?: string;
   }) {
-    await db
+    const rows = await db
       .insert(oidcProviders)
       .values({
         id: data.id,
@@ -38,7 +39,9 @@ export const oidcService = {
         clientSecret: data.clientSecret,
         scopes: data.scopes || 'openid email profile',
       })
-      .onConflictDoNothing();
+      .onConflictDoNothing()
+      .returning();
+    return rows[0] ?? null;
   },
 
   async update(

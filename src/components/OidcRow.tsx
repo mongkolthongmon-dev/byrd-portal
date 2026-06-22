@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { deleteOidc, toggleOidc, updateOidc } from '@/app/admin/actions';
+import ActionForm from '@/components/ActionForm';
 
 type Provider = {
   id: string;
@@ -21,10 +22,10 @@ export default function OidcRow({ provider }: { provider: Provider }) {
   if (editing) {
     return (
       <li key="edit" className="px-4 py-4">
-        <form
-          action={async (formData) => {
-            await updateOidc(formData);
-            setEditing(false);
+        <ActionForm
+          action={updateOidc}
+          onResult={(r) => {
+            if (r.ok) setEditing(false);
           }}
           className="grid gap-3 sm:grid-cols-2"
         >
@@ -75,7 +76,7 @@ export default function OidcRow({ provider }: { provider: Provider }) {
               Cancel
             </button>
           </div>
-        </form>
+        </ActionForm>
       </li>
     );
   }
@@ -88,7 +89,7 @@ export default function OidcRow({ provider }: { provider: Provider }) {
         </div>
         <div className="text-xs text-slate-500">{provider.issuer}</div>
       </div>
-      <form action={toggleOidc}>
+      <ActionForm action={toggleOidc}>
         <input type="hidden" name="id" value={provider.id} />
         <input type="hidden" name="enabled" value={String(provider.enabled)} />
         <button
@@ -98,7 +99,7 @@ export default function OidcRow({ provider }: { provider: Provider }) {
         >
           {provider.enabled ? 'Enabled' : 'Disabled'}
         </button>
-      </form>
+      </ActionForm>
       <button
         type="button"
         onClick={() => setEditing(true)}
@@ -106,10 +107,10 @@ export default function OidcRow({ provider }: { provider: Provider }) {
       >
         Edit
       </button>
-      <form action={deleteOidc}>
+      <ActionForm action={deleteOidc}>
         <input type="hidden" name="id" value={provider.id} />
         <button className="text-sm text-slate-400 hover:text-red-600">Delete</button>
-      </form>
+      </ActionForm>
     </li>
   );
 }

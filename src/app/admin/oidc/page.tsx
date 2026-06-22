@@ -1,5 +1,6 @@
 import { oidcService } from '@/services/oidcService';
 import OidcRow from '@/components/OidcRow';
+import ActionForm from '@/components/ActionForm';
 import { createOidc } from '../actions';
 
 export const runtime = 'nodejs';
@@ -17,7 +18,7 @@ export default async function AdminOidcPage() {
         your provider&apos;s OAuth app settings. Enabled providers appear as login buttons.
       </div>
 
-      <form
+      <ActionForm
         action={createOidc}
         className="grid gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-2"
       >
@@ -48,7 +49,7 @@ export default async function AdminOidcPage() {
         <button className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 sm:col-span-2">
           Add provider
         </button>
-      </form>
+      </ActionForm>
 
       {rows.length === 0 ? (
         <p className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500">
