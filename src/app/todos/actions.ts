@@ -1,0 +1,44 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { requireUser } from '@/lib/guards';
+import { todoService } from '@/services/todoService';
+
+// All writes re-check auth on the server and delegate to the service, which
+// scopes every mutation by owner id.
+
+export async function addTodo(formData: FormData) {
+  const user = await requireUser();
+  const title = String(formData.get('title') ?? '').trim();
+  if (!title) return;
+
+  await todoService.create(Number(user.id), title);
+  revalidatePath('/todos');
+}
+
+export async function editTodo(formData: FormData) {
+  const user = await requireUser();
+  const id = Number(formData.get('id'));
+  const title = String(formData.get('title') ?? '').trim();
+  if (!title) return;
+
+  await todoService.updateTitle(id, Number(user.id), title);
+  revalidatePath('/todos');
+}
+
+export async function toggleTodo(formData: FormData) {
+  const user = await requireUser();
+  const id = Number(formData.get('id'));
+  const done = formData.get('done') === 'true';
+
+  await todoService.setDone(id, Number(user.id), !done);
+  revalidatePath('/todos');
+}
+
+export async function deleteTodo(formData: FormData) {
+  const user = await requireUser();
+  const id = Number(formData.get('id'));
+
+  await todoService.remove(id, Number(user.id));
+  revalidatePath('/todos');
+}
