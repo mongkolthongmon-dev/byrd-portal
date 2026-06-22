@@ -138,11 +138,14 @@ Secrets are never committed — `.env.local` is gitignored; use
 2. Set env vars in the Vercel project: `DATABASE_URL`, `AUTH_SECRET`,
    `ENCODE_KEY` (and optionally `ADMIN_EMAIL`/`ADMIN_PASSWORD`). `AUTH_URL` is
    set automatically.
-3. **Migrations run automatically on deploy** via the `vercel-build` script
-   (`drizzle-kit migrate && next build`) — Vercel runs `vercel-build` instead of
-   `build` when present, so the prod schema is always applied. (`db:generate` is
-   never run on deploy — migration SQL is committed to the repo.) Run
-   `npm run db:seed` once against the prod `DATABASE_URL` to insert sample data.
+3. **Migrations and seed run automatically on deploy** via the `vercel-build`
+   script (`drizzle-kit migrate && tsx scripts/seed.ts && next build`) — Vercel
+   runs `vercel-build` instead of `build` when present, so the prod schema is
+   applied and sample data (admin user, packages, menus) is inserted on every
+   deploy. The seed is idempotent, so re-deploys never duplicate data.
+   (`db:generate` is never run on deploy — migration SQL is committed to the
+   repo.) Optionally set `ADMIN_EMAIL`/`ADMIN_PASSWORD` in Vercel to control the
+   seeded admin credentials.
 4. For each OIDC provider, add the callback URL
    `https://<your-app>.vercel.app/api/auth/callback/<provider-id>` in the
    provider's OAuth app.
